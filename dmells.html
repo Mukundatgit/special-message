@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Message</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff0f3;
+            margin: 0;
+            overflow: hidden; /* Keeps heart rain contained */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Card Container */
+        .container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(255, 75, 110, 0.2);
+            text-align: center;
+            max-width: 450px;
+            width: 85%;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        h1 { color: #ff4b6e; margin-bottom: 1rem; }
+        
+        /* Input & Button Styling */
+        input {
+            padding: 12px;
+            width: 80%;
+            border: 2px solid #ffccd5;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            outline: none;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        button {
+            background-color: #ff4b6e;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff335c;
+            transform: scale(1.05);
+        }
+
+        /* Heart Icons */
+        .heart-static {
+            color: #ff4b6e;
+            font-size: 60px;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Message Area Hidden by Default */
+        #message-area { display: none; }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Falling Hearts Styling */
+        .falling-heart {
+            position: absolute;
+            top: -10%;
+            color: #ff4b6e;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="login-box">
+        <div class="heart-static">❤</div>
+        <h1>Unlock a Surprise</h1>
+        <p>Enter our secret word to see your message.</p>
+        <input type="password" id="passInput" placeholder="Password...">
+        <br>
+        <button onclick="checkPassword()">Unlock My Heart</button>
+    </div>
+
+    <div class="container" id="message-area">
+        <div class="heart-static">❤</div>
+        <h1>I Love You!</h1>
+        <p style="line-height: 1.6; color: #444; font-size: 18px;">
+            "Every moment with you feels like a beautiful dream come true. You are my greatest support, 
+            my favorite person, and my whole world. Thank you for being you."
+        </p>
+        <p style="margin-top: 20px; font-size: 18px;">
+            <strong>Forever yours, <br> Mukund</strong>
+        </p>
+    </div>
+
+    <script>
+        // Check if she has already logged in before using LocalStorage
+        window.onload = function() {
+            if (localStorage.getItem("isLoggedIn") === "true") {
+                showLoveMessage();
+            }
+        }
+
+        function checkPassword() {
+            const password = document.getElementById("passInput").value;
+            // The password you requested: Mybaby
+            if (password === "Mybaby") {
+                localStorage.setItem("isLoggedIn", "true");
+                showLoveMessage();
+            } else {
+                alert("Oops! That's not our password. Try again! ❤️");
+            }
+        }
+
+        function showLoveMessage() {
+            document.getElementById("login-box").style.display = "none";
+            document.getElementById("message-area").style.display = "block";
+            startHeartRain();
+        }
+
+        function startHeartRain() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('falling-heart');
+                heart.innerHTML = '❤';
+                
+                // Randomize position and appearance
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = Math.random() * 20 + 15 + 'px';
+                
+                // Randomize animation speed
+                const duration = Math.random() * 3 + 3;
+                heart.style.animationDuration = duration + 's';
+                
+                heart.style.opacity = Math.random() * 0.5 + 0.5;
+                
+                document.body.appendChild(heart);
+
+                // Clean up DOM after heart falls
+                setTimeout(() => { heart.remove(); }, duration * 1000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
